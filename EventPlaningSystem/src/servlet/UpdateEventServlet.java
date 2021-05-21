@@ -1,0 +1,59 @@
+package servlet;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import model.Event;
+import service.EventServiceImp;
+import service.IEventService;
+
+/**
+ * Servlet implementation class UpdateEventServlet
+ */
+@WebServlet("/UpdateEventServlet")
+public class UpdateEventServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public UpdateEventServlet() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType("text/html");
+		
+		Event event = new Event();
+		String eventID = request.getParameter("eventID");
+		event.setEventID(eventID);
+		event.setEventName(request.getParameter("eventName"));
+		event.setEventDate(request.getParameter("eventDate"));
+		event.setStartTime(request.getParameter("eventTime"));
+		event.setVenue(request.getParameter("eventLocation"));
+		event.setMaxPrticipants(Integer.parseInt(request.getParameter("MaxParticipants")));
+		
+		IEventService iEventService = new EventServiceImp();
+		iEventService.updateEvent(eventID, event);
+		
+		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/jsps/ListEvents.jsp");
+		dispatcher.forward(request, response);
+	}
+}
